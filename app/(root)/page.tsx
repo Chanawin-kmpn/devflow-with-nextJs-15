@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { auth } from "@/auth";
+import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -12,7 +13,7 @@ const questions = [
       "into brick book never brought stairs jar smell matter setting nothing four play met them dead road structure member fallen mean biggest heat actual",
     tags: [
       { _id: "1", name: "React" },
-      { _id: "2", name: "Javascript" },
+      { _id: "2", name: "React" },
     ],
     author: { _id: "1", name: "John Doe" },
     upvotes: 10,
@@ -26,7 +27,7 @@ const questions = [
     description:
       "standard previous push political usually she make trace doctor coach nor represent discussion progress connected today tried activity worker pilot which community parts anything",
     tags: [
-      { _id: "1", name: "React" },
+      { _id: "1", name: "Javascript" },
       { _id: "2", name: "Javascript" },
     ],
     author: { _id: "1", name: "John Doe" },
@@ -41,11 +42,17 @@ interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: SearchParams) => {
-  const { query = "" } = await searchParams;
+  const { query = "", filter = "" } = await searchParams;
 
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query?.toLocaleLowerCase())
-  );
+  const filteredQuestions = questions.filter((question) => {
+    const matchesQuery = question.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
+    const matchesFilter = filter
+      ? question.tags[0].name.toLowerCase() === filter.toLowerCase()
+      : true;
+    return matchesQuery && matchesFilter;
+  });
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -66,7 +73,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           otherClass="flex-1"
         />
       </section>
-      HomeFilter
+      <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
           <h1 key={question._id}>{question.title}</h1>
