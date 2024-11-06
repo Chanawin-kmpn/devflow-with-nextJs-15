@@ -13,7 +13,7 @@ interface RemoveUrlQueryParams {
 export const formUrlQuery = ({ params, key, value }: UrlQueryParams) => {
   const queryString = qs.parse(params); // {query: value}
 
-  queryString[key] = value; // อัพเดต params ปัจจุบัน
+  queryString[key] = value; // อัพเดตค่าใน params ปัจจุบัน
 
   return qs.stringifyUrl({
     url: window.location.pathname,
