@@ -26,14 +26,13 @@ import {
   tablePlugin,
   imagePlugin,
   codeBlockPlugin,
-  codeBlockLanguages$,
   codeMirrorPlugin,
   diffSourcePlugin,
 } from "@mdxeditor/editor";
 import { basicDark } from "cm6-theme-basic-dark";
+import { useTheme } from "next-themes";
 import type { ForwardedRef } from "react";
 import "./dark-editor.css";
-import { useTheme } from "next-themes";
 
 interface Props {
   value: string;
@@ -50,7 +49,7 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
       key={resolvedTheme}
       ref={editorRef}
       markdown={value}
-      className="background-light800_dark200 light-border-2 markdown-editor dark-editor w-full border"
+      className="background-light800_dark200 light-border-2 markdown-editor dark-editor grid w-full border"
       onChange={fieldChange}
       plugins={[
         headingsPlugin(),
