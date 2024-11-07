@@ -11,7 +11,7 @@ export interface IUser {
   reputation?: number;
 }
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<IUser>(
   {
     name: { type: String, require: true },
     username: { type: String, require: true },
