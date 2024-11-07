@@ -1,6 +1,12 @@
 import { model, models, Schema, Types } from "mongoose";
 
-export interface IAnswer {}
+export interface IAnswer {
+  author: Types.ObjectId;
+  question: Types.ObjectId;
+  content: string;
+  upvotes: number;
+  downvotes: number;
+}
 
 const AnswerSchema = new Schema<IAnswer>(
   {
