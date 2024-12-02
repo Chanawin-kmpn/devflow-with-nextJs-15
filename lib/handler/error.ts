@@ -23,9 +23,6 @@ const formatResponse = (
   return responseType === "api"
     ? NextResponse.json(responseContent, {
         status,
-        headers: {
-          "Content-Type": "application/json",
-        },
       })
     : { status, ...responseContent };
 };
