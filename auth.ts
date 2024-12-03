@@ -3,7 +3,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
 import { IAccountDoc } from "./database/account.model";
-import { api } from "./lib/handler/api";
+import { api } from "./lib/api";
 import { ActionResponse } from "./types/global";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
