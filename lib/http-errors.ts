@@ -33,9 +33,9 @@ export class ValidationError extends RequestError {
           return messages.join(" and ");
         }
       }
-    );
+    ); //* แปลง Object errors ที่เป็น parameter ให้อยู่ในรูปของ array จากนั้นก็เข้าถึง error ทีละตัวโดย ย่อยออกมาเป็น field และ messages จากนั้นก็สร้างตัวแปร fieldName ขึ้นมา และทำการเปลี่ยนตัวอักษรตัวแรกเป็นตัวใหญ่ สร้างเงื่อนไขเข้ามาตรวจสอบว่า messages ตัวแรกใน array เป็น Required หรือไม่ ถ้าใช่ก็ให้ return ออกมาเป็นประโยคว่า field นั้น is required ถ้าไม่ใช่ Required ก็ให้สมาชิก Messages ทุกตัว เชื่อมกันด้วย and
 
-    return formattedMessages.join(", ");
+    return formattedMessages.join(", "); //* จากนั้นก็ให้สมาชิกแต่ละตัวของ errors เชื่อมข้อความกันด้วย ,
   }
 }
 
