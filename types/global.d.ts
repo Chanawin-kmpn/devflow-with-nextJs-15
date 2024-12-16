@@ -46,3 +46,11 @@ interface RouteParams {
 // * Differace between params and searchParams
 // * params: /questions/:id
 // * searchParams: /questions?tag=javascript
+
+interface PaginatedSearchParams {
+  page?: number;
+  pageSize?: number;
+  query?: string;
+  filter?: string;
+  sort?: string;
+}

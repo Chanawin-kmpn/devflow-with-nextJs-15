@@ -8,7 +8,6 @@ import handleError from "@/lib/handler/error";
 import { ValidationError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
 import { SignInWithOAuthSchema } from "@/lib/validations";
-import { APIErrorResponse } from "@/types/global";
 
 // ? โค้ดนี้คือ API ENDPOINT  สำหรับจัดการการล็อกอินด้วย OAUTH (เช่น การล็อกอินผ่าน Google, Github) โดยเขียนเพื่อจัดการข้อมูลผู้ใช้และบัญชีที่เชื่อมต่อ
 // ? ประโยชน์ก็คือ รองรับการล็อกอินผ่าน OAuth provider หลายๆแบบ, ป้องกันการสร้างบัญชีซ้ำซ้อน, จัดการข้อผิดพลาดอย่างมีระบบ
