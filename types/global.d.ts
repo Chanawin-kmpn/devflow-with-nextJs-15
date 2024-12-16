@@ -1,5 +1,3 @@
-import { NextResponse } from "next/server";
-
 interface Tag {
   _id: string;
   name: string;
@@ -14,6 +12,7 @@ interface Author {
 interface Question {
   _id: string;
   title: string;
+  content: string;
   tags: Tag[];
   author: Author;
   createdAt: Date;
