@@ -100,8 +100,8 @@ export async function editQuestion(
   session.startTransaction();
 
   try {
-    const question = await Question.findById(questionId).populate("tags"); //* ไม่ใส่ session เพราะว่าไม่จำเป็นต้องเปลี่ยนแปลงข้อมูลอ่ะไรใน database เป็นเพียงแค่การดึงข้อมูลมาเฉยๆเท่านั้น
-
+    const question = await Question.findById(questionId).populate("tags");
+    // * ไม่ใช้ session เพราะว่าไม่ได้เปลี่ยนแปลงข้อมูลใน database
     if (!question) {
       throw new Error("Question not found");
     }
@@ -122,14 +122,16 @@ export async function editQuestion(
           t.name.toLowerCase().includes(tag.toLowerCase())
         )
     );
+
     const tagsToRemove = question.tags.filter(
       (tag: ITagDoc) =>
-        !tags.some((t) => t.toLowerCase().includes(tag.name.toLowerCase()))
+        !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
     );
 
-    const newTagDocument = [];
+    const newTagDocuments = [];
+
     if (tagsToAdd.length > 0) {
-      for (const tag of tags) {
+      for (const tag of tagsToAdd) {
         const existingTag = await Tag.findOneAndUpdate(
           { name: { $regex: `^${tag}$`, $options: "i" } },
           { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
@@ -137,7 +139,7 @@ export async function editQuestion(
         );
 
         if (existingTag) {
-          newTagDocument.push({
+          newTagDocuments.push({
             tag: existingTag._id,
             question: questionId,
           });
@@ -149,17 +151,15 @@ export async function editQuestion(
 
     if (tagsToRemove.length > 0) {
       const tagIdsToRemove = tagsToRemove.map((tag: ITagDoc) => tag._id);
+
       await Tag.updateMany(
         { _id: { $in: tagIdsToRemove } },
-        { $inc: { question: -1 } },
+        { $inc: { questions: -1 } },
         { session }
       );
 
       await TagQuestion.deleteMany(
-        {
-          tag: { $in: tagIdsToRemove },
-          question: questionId,
-        },
+        { tag: { $in: tagIdsToRemove }, question: questionId },
         { session }
       );
 
@@ -171,8 +171,8 @@ export async function editQuestion(
       );
     }
 
-    if (newTagDocument.length > 0) {
-      await TagQuestion.insertMany(newTagDocument, { session });
+    if (newTagDocuments.length > 0) {
+      await TagQuestion.insertMany(newTagDocuments, { session });
     }
 
     await question.save({ session });
@@ -183,7 +183,7 @@ export async function editQuestion(
     await session.abortTransaction();
     return handleError(error) as ErrorResponse;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 }
 
