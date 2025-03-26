@@ -142,6 +142,6 @@ export const PaginatedSearchParamsSchema = z.object({
   sort: z.string().optional(),
 });
 
-export const GetTagQuestionSchema = PaginatedSearchParamsSchema.extend({
+export const GetTagQuestionsSchema = PaginatedSearchParamsSchema.extend({
   tagId: z.string().min(1, { message: "Tag ID is required." }),
 });
