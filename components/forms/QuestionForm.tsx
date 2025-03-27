@@ -28,7 +28,6 @@ import {
 import { Input } from "../ui/input";
 
 const Editor = dynamic(() => import("@/components/editor"), {
-  // Make sure we turn SSR off
   ssr: false,
 });
 
@@ -41,6 +40,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
   const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
   const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
@@ -54,11 +54,11 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
     e: React.KeyboardEvent<HTMLInputElement>,
     field: { value: string[] }
   ) => {
+    console.log(field, e);
     if (e.key === "Enter") {
       e.preventDefault();
       const tagInput = e.currentTarget.value.trim();
 
-      // ถ้ามีค่า tagInput และ tagInput ความยาวน้อยกว่า 15 และ ค่าของ tagInput ยังไม่มีค่าที่อยู่ใน field value ให้ set value tagInput ใน array ของ tags
       if (tagInput && tagInput.length < 15 && !field.value.includes(tagInput)) {
         form.setValue("tags", [...field.value, tagInput]);
         e.currentTarget.value = "";
@@ -99,13 +99,14 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           questionId: question?._id,
           ...data,
         });
+
         if (result.success) {
           toast({
             title: "Success",
             description: "Question updated successfully",
           });
 
-          if (result.data) router.push(ROUTES.QUESTION(result.data?._id));
+          if (result.data) router.push(ROUTES.QUESTION(result.data._id));
         } else {
           toast({
             title: `Error ${result.status}`,
@@ -116,6 +117,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
 
         return;
       }
+
       const result = await createQuestion(data);
 
       if (result.success) {
@@ -124,7 +126,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           description: "Question created successfully",
         });
 
-        if (result.data) router.push(ROUTES.QUESTION(result.data?._id));
+        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
       } else {
         toast({
           title: `Error ${result.status}`,
@@ -134,30 +136,30 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
       }
     });
   };
+
   return (
     <Form {...form}>
       <form
-        action=""
-        className="flex w-full flex-col gap-11"
+        className="flex w-full flex-col gap-10"
         onSubmit={form.handleSubmit(handleCreateQuestion)}
       >
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col ">
+            <FormItem className="flex w-full flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Question Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
-                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] rounded-1.5 border"
+                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
                   {...field}
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Be specific and imagine you&apos;re asking a question to another
-                person
+                person.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -167,21 +169,21 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           control={form.control}
           name="content"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col ">
+            <FormItem className="flex w-full flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
                 Detailed explanation of your problem{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
                 <Editor
-                  fieldChange={field.onChange}
                   value={field.value}
                   editorRef={editorRef}
+                  fieldChange={field.onChange}
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Introduce the problem and expand on that you&apos;ve put in the
-                title
+                Introduce the problem and expand on what you&apos;ve put in the
+                title.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -198,7 +200,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
               <FormControl>
                 <div>
                   <Input
-                    className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] rounded-1.5 border"
+                    className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
                     placeholder="Add tags..."
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
                   />
@@ -230,17 +232,17 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
 
         <div className="mt-16 flex justify-end">
           <Button
-            disabled={isPending}
             type="submit"
-            className="primary-gradient !text-light-900"
+            disabled={isPending}
+            className="primary-gradient w-fit !text-light-900"
           >
             {isPending ? (
               <>
-                <ReloadIcon className="mr-2 size-4 animate-spin" />{" "}
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
                 <span>Submitting</span>
               </>
             ) : (
-              <>{isEdit ? "Edit" : "Ask A Question"}</>
+              <>{isEdit ? "Edit" : "Ask a Question"}</>
             )}
           </Button>
         </div>
