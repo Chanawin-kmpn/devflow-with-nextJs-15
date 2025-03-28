@@ -8,7 +8,6 @@ import handleError from "../handler/error";
 import { Question } from "@/database";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
-import { filter } from "@mdxeditor/editor";
 
 export async function createAnswer(
   params: CreateAnswerParams
