@@ -110,12 +110,16 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           data={answersResult?.answers}
           success={areAnswersLoaded}
           error={answersError}
-          totalAnswers={answersResult?.totalAnswers}
+          totalAnswers={answersResult?.totalAnswers || 0}
         />
       </section>
 
       <section className="my-5">
-        <AnswerForm questionId={question._id} />
+        <AnswerForm
+          questionId={question._id}
+          questionTitle={question.title}
+          questionContent={question.content}
+        />
       </section>
     </>
   );
