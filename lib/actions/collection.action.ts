@@ -27,7 +27,7 @@ export async function toggleSaveQuestion(
     const question = await Question.findById(questionId);
     if (!question) throw new Error("Question not found!");
 
-    const collection = await Collection.findById({
+    const collection = await Collection.findOne({
       question: questionId,
       author: userId,
     });
