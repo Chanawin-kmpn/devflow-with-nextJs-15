@@ -17,10 +17,10 @@ import { redirect } from "next/navigation";
 import { after } from "node:test";
 import React, { Suspense } from "react";
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
-
+  const { page, pageSize, filter } = await searchParams;
   after(async () => {
     await incrementViews({ questionId: id });
   });
@@ -33,9 +33,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     error: answersError,
   } = await getAnswers({
     questionId: id,
-    page: 1,
-    pageSize: 10,
-    filter: "latest",
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    filter,
   });
 
   const hasVotedPromise = hasVoted({
