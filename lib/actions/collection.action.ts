@@ -164,8 +164,8 @@ export async function getSavedQuestion(
       pipline.push({
         $match: {
           $or: [
-            { "question.title": { $regex: query, $option: "i" } },
-            { "question.content": { $regex: query, $option: "i" } },
+            { "question.title": { $regex: query, $options: "i" } },
+            { "question.content": { $regex: query, $options: "i" } },
           ],
         },
       });
