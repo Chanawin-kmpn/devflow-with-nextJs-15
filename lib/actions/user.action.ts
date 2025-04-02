@@ -6,7 +6,6 @@ import handleError from "../handler/error";
 import { GetUserSchema, PaginatedSearchParamsSchema } from "../validations";
 import { FilterQuery } from "mongoose";
 import { error } from "console";
-import { validateHeaderName } from "http";
 
 export async function getUsers(
   params: PaginatedSearchParams
@@ -78,7 +77,7 @@ export async function getUsers(
 
 export async function getUser(params: GetUserParams): Promise<
   ActionResponse<{
-    user: typeof User;
+    user: User;
     totalQuestions: number;
     totalAnswers: number;
   }>
