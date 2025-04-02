@@ -10,6 +10,7 @@ import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
 import { HomePageFilters } from "@/constants/filter";
 import CommonFilter from "@/components/filters/CommonFilter";
+import Pagination from "@/components/Pagination";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -24,7 +25,7 @@ const Home = async ({ searchParams }: SearchParams) => {
     filter: filter || "",
   });
 
-  const { questions } = data || {};
+  const { questions, isNext } = data || {};
 
   // const filteredQuestions = questions.filter((question) => {
   //   const matchesQuery = question.title
@@ -76,6 +77,7 @@ const Home = async ({ searchParams }: SearchParams) => {
           </div>
         )}
       />
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };
