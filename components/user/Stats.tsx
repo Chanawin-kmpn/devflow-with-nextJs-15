@@ -20,7 +20,7 @@ const StatsCard = ({ imgUrl, value, title }: StatsCardProps) => {
       <Image src={imgUrl} alt={title} width={40} height={40} />
       <div>
         <p className="paragraph-semibold text-dark200_light900">{value}</p>
-        <p className="body-meidum text-darkl300_light700">{title}</p>
+        <p className="body-medium text-dark300_light700">{title}</p>
       </div>
     </div>
   );
