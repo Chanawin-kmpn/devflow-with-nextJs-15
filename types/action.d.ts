@@ -84,3 +84,9 @@ interface User {
   reputaiton?: number;
   createdAt: Date;
 }
+
+interface BadgeCounts {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
+}
