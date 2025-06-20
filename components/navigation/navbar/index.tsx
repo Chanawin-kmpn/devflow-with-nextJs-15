@@ -11,7 +11,7 @@ import Theme from "./Theme";
 const Navbar = async () => {
   const session = await auth();
   return (
-    <nav className="flex-between background-light900_dark200 dark:shadow-none fixed z-50 w-full p-6 shadow-light-300 ">
+    <nav className="flex-between background-light900_dark200 fixed z-50 w-full p-6 shadow-light-300 dark:shadow-none ">
       <Link href="/" className="flex items-center gap-1">
         <Image
           src="/images/site-logo.svg"

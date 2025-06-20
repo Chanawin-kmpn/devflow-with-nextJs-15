@@ -6,10 +6,12 @@ import { cn, getTimeStamp } from "@/lib/utils";
 import Preview from "../editor/Preview";
 import Votes from "../votes/Votes";
 import { hasVoted } from "@/lib/actions/vote.action";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 interface Props extends Answer {
   containerClasses?: string;
   showReadMore?: boolean;
+  showActionBtns?: boolean;
 }
 
 const AnswerCard = ({
@@ -22,14 +24,23 @@ const AnswerCard = ({
   question,
   containerClasses,
   showReadMore = false,
+  showActionBtns = false,
 }: Props) => {
   const hasVotedPromise = hasVoted({
     targetId: _id,
     targetType: "answer",
   });
   return (
-    <article className={cn("light-border border-b py-10", containerClasses)}>
+    <article
+      className={cn("light-border border-b py-10 relative", containerClasses)}
+    >
       <span id={`answers-${_id}`} className="hash-span" />
+
+      {showActionBtns && (
+        <div className="flex-center background-light800 absolute -right-2 -top-5 size-9 rounded-full">
+          <EditDeleteAction type="Answer" itemId={_id} />
+        </div>
+      )}
 
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-1 sm:items-center">
@@ -44,11 +55,11 @@ const AnswerCard = ({
             href={ROUTES.PROFILE(author._id)}
             className="flex flex-col max-sm:ml-1 sm:flex-row sm:items-center"
           >
-            <p className="body-semibold text-dark300_light700">
+            <p className="text-dark300_light700 body-semibold">
               {author.name ?? "Anonymouse"}
             </p>
 
-            <p className="small-regular text-light400_light500 ml-0.5 mt-0.5 line-clamp-1">
+            <p className="text-light400_light500 small-regular ml-0.5 mt-0.5 line-clamp-1">
               <span className="max-sm:hidden"> • </span>
               answered {getTimeStamp(createdAt)}
             </p>

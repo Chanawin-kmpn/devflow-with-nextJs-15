@@ -32,7 +32,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   if (!success)
     return (
       <div>
-        <div className="h1-bold text-dark100_light900">{error?.message}</div>
+        <div className="text-dark100_light900 h1-bold">{error?.message}</div>
       </div>
     );
 
@@ -84,8 +84,8 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           />
 
           <div className="mt-3">
-            <h2 className="h2-bold text-dark100_light900">{name}</h2>
-            <p className="paragraph-regular text-dark200_light800">
+            <h2 className="text-dark100_light900 h2-bold">{name}</h2>
+            <p className="text-dark200_light800 paragraph-regular">
               @{username}
             </p>
 
@@ -112,7 +112,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
             </div>
 
             {bio && (
-              <p className="paragraph-regular text-dark400_light800 mt-8">
+              <p className="text-dark400_light800 paragraph-regular mt-8">
                 {bio}
               </p>
             )}
@@ -122,7 +122,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
           {loggedInUser?.user?.id === id && (
             <Link href={"/profile/edit"}>
-              <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-12 min-w-44 px-4 py-3">
+              <Button className="text-dark300_light900 paragraph-medium btn-secondary min-h-12 min-w-44 px-4 py-3">
                 Edit Profile
               </Button>
             </Link>
@@ -162,7 +162,13 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               render={(questions) => (
                 <div className="flex w-full flex-col gap-6">
                   {questions.map((question) => (
-                    <QuestionCard key={question._id} question={question} />
+                    <QuestionCard
+                      key={question._id}
+                      question={question}
+                      showActionBtns={
+                        loggedInUser?.user?.id === question.author._id
+                      }
+                    />
                   ))}
                 </div>
               )}
@@ -180,7 +186,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               success={userAnswersSuccess}
               error={userAnswersError}
               render={(answers) => (
-                <div className="flex w-full flex-col gap-6">
+                <div className="flex w-full flex-col gap-10">
                   {answers.map((answer) => (
                     <AnswerCard
                       key={answer._id}
@@ -188,6 +194,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                       content={answer.content.slice(0, 27)}
                       containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
                       showReadMore
+                      showActionBtns={
+                        loggedInUser?.user?.id === answer.author._id
+                      }
                     />
                   ))}
                 </div>
@@ -198,7 +207,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         </Tabs>
 
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
-          <h3 className="h3-bold text-dark200_light900">Top Tech</h3>
+          <h3 className="text-dark200_light900 h3-bold">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
             <DataRenderer
               data={tags}

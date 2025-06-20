@@ -56,11 +56,12 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
             <UserAvatar
               id={author._id}
               name={author.name}
+              imageUrl={author.image}
               className="size-[22px]"
               fallbackClassName="text-[10px]"
             />
             <Link href={ROUTES.PROFILE(author._id)}>
-              <p className="paragraph-semibold text-dark300_light700">
+              <p className="text-dark300_light700 paragraph-semibold">
                 {author.name}
               </p>
             </Link>
@@ -86,7 +87,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
           </div>
         </div>
 
-        <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
+        <h2 className="text-dark200_light900 h2-semibold mt-3.5 w-full">
           {title}
         </h2>
       </div>
