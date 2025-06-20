@@ -3,9 +3,13 @@
 import mongoose from "mongoose";
 import Answer, { IAnswerDoc } from "@/database/answer.model";
 import action from "../handler/action";
-import { AnswerServerSchema, GetAnsweraSchema } from "../validations";
+import {
+  AnswerServerSchema,
+  DeleteAnswerSchema,
+  GetAnsweraSchema,
+} from "../validations";
 import handleError from "../handler/error";
-import { Question } from "@/database";
+import { Question, Vote } from "@/database";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
 
@@ -120,6 +124,51 @@ export async function getAnswers(
         totalAnswers,
       },
     };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function deleteAnswer(
+  params: DeleteAnswerParams
+): Promise<ActionResponse> {
+  const validationResult = await action({
+    params,
+    schema: DeleteAnswerSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { answerId } = validationResult.params!;
+
+  const { user } = validationResult.session!;
+
+  try {
+    const answer = await Answer.findById(answerId);
+
+    if (!answer) {
+      throw new Error("Answer not found");
+    }
+
+    if (answer.author.toString() !== user?.id)
+      throw new Error("You're not allowed to delete this answer");
+
+    await Question.findByIdAndUpdate(
+      answer.question,
+      { $inc: { answer: -1 } },
+      { new: true }
+    );
+
+    await Vote.deleteMany({ actionId: answerId, actionType: "answer" });
+
+    await Answer.findByIdAndDelete(answerId);
+
+    revalidatePath(`/profile/${user?.id}`);
+
+    return { success: true };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
