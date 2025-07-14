@@ -106,7 +106,8 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
             description: "Question updated successfully",
           });
 
-          if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+          if (result.data)
+            router.push(ROUTES.QUESTION(result.data._id as string));
         } else {
           toast({
             title: `Error ${result.status}`,
@@ -148,12 +149,12 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           name="title"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
+              <FormLabel className="text-dark400_light800 paragraph-semibold">
                 Question Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
-                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
+                  className="light-border-2 text-dark300_light700 paragraph-regular background-light700_dark300 no-focus min-h-[56px] border"
                   {...field}
                 />
               </FormControl>
@@ -170,7 +171,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           name="content"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
+              <FormLabel className="text-dark400_light800 paragraph-semibold">
                 Detailed explanation of your problem{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
@@ -194,13 +195,13 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           name="tags"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col gap-3">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
+              <FormLabel className="text-dark400_light800 paragraph-semibold">
                 Tags <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
                 <div>
                   <Input
-                    className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
+                    className="light-border-2 text-dark300_light700 paragraph-regular background-light700_dark300 no-focus min-h-[56px] border"
                     placeholder="Add tags..."
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
                   />

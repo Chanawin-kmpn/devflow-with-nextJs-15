@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 import { signIn } from "@/auth";
 import Account from "@/database/account.model";
 import User from "@/database/user.model";
-import { ActionResponse, ErrorResponse } from "@/types/global";
 
 import action from "../handler/action";
 import handleError from "../handler/error";

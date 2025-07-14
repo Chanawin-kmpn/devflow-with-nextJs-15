@@ -4,7 +4,6 @@ import Account from "@/database/account.model";
 import handleError from "@/lib/handler/error";
 import { NotFoundError, ValidationError } from "@/lib/http-errors";
 import { AccountSchema } from "@/lib/validations";
-import { APIErrorResponse } from "@/types/global";
 
 // POST /api/users/email
 export async function POST(request: Request) {
